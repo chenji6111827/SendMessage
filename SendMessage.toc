@@ -1,0 +1,10 @@
+## Interface: 120000
+## Version: 1.0.0
+## Title: SendMessage
+## Author: CHEN
+## IconTexture:Interface/ICONS/UI_EmberCourt-Emoji-Elated
+## SavedVariables: SendMessageDB,SendMessagePositionDB
+
+
+UITemplate.xml
+

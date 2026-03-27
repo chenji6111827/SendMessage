@@ -1,0 +1,285 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ c:/UI.xsd">
+
+    <Script file="UITemplateMixin.lua" />
+
+
+    <Frame name="DragAreaTemplate" registerForDrag="LeftButton" movable="true" virtual="true">
+        <Scripts>
+            <OnDragStart>
+                self:StartMoving()
+            </OnDragStart>
+            <OnDragStop>
+                self:StopMovingOrSizing()
+            </OnDragStop>
+        </Scripts>
+    </Frame>
+
+    <Button name="CloseButtonTemplate" inherits="UIPanelCloseButton" virtual="true">
+        <Size x="32" y="32" />
+        <Anchors>
+            <Anchor point="TOPRIGHT" x="-15" y="-15" />
+        </Anchors>
+    </Button>
+
+    <Frame name="BackGroundTemplate" inherits="BackdropTemplate,DragAreaTemplate"
+        hidden="true"
+        frameStrata="DIALOG"
+        virtual="true">
+        <Size x="550" y="500" />
+        <Anchors>
+            <Anchor point="CENTER" x="0" y="200" />
+        </Anchors>
+        <KeyValues>
+            <KeyValue key="backdropInfo" value="BACKDROP_GOLD_DIALOG_32_32" type="global" />
+        </KeyValues>
+    </Frame>
+
+    <FontString name="ConfigLabelTemplate" inherits="NumberFont_Outline_Huge" justifyH="LEFT"
+        virtual="true">
+        <Color r="0.85" g="0.55" b="0.30" />
+    </FontString>
+
+    <EditBox name="ConfigEditBoxTemplate" mixin="ConfigEditBoxMixin" inherits="InputBoxTemplate"
+        autoFocus="false"
+        enableKeyboard="true" virtual="true">
+        <Size x="400" y="60" />
+        <FontString inherits="NumberFont_Outline_Huge" justifyH="LEFT">
+            <Anchors>
+                <Anchor point="TOPLEFT" x="16" y="0" />
+                <Anchor point="BOTTOMRIGHT" x="-20" y="0" />
+            </Anchors>
+            <Color r="1" g="0.35" b="0.35" />
+        </FontString>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+            <!-- <OnTextChanged method="OnTextChanged" /> -->
+            <OnEditFocusLost method="OnEditFocusLost" />
+            <OnEnterPressed method="OnEnterPressed" />
+        </Scripts>
+    </EditBox>
+
+
+    <Button name="PureTextButtonTemplate" registerForClicks="LeftButtonDown,RightButtonDown"
+        mixin="SendMessageTextButtonMixin"
+        virtual="true">
+        <Size x="80" y="25" />
+        <Layers>
+            <Layer level="OVERLAY">
+                <FontString parentKey="text" text="Button" inherits="ConfigLabelTemplate">
+                    <Color r="0" g="1" b="0.6" a="1" />
+                </FontString>
+            </Layer>
+        </Layers>
+        <HighlightTexture atlas="RotationHelper_SmallAnts_1frame" />
+        <Scripts>
+            <OnLoad method="OnLoad" />
+            <OnClick method="OnClick" />
+            <OnEnter method="OnEnter" />
+            <OnLeave method="OnLeave" />
+        </Scripts>
+    </Button>
+
+
+    <Frame name="SendMessageMainFrameTempalte" inherits="BackdropTemplate" hidden="true"
+        virtual="true">
+        <Size x="200" y="450" />
+        <KeyValues>
+            <KeyValue key="backdropInfo" value="BACKDROP_WATERMARK_DIALOG_0_16" type="global" />
+        </KeyValues>
+        <Anchors>
+            <Anchor point="TOP" relativeKey="$parent" relativePoint="BOTTOM" x="0" y="-5" />
+        </Anchors>
+        <Scripts>
+            <OnLoad>
+                self:SetBackdropColor(0, 0, 0, 0)
+            </OnLoad>
+        </Scripts>
+        <Frames>
+            <Button parentKey="TextButton1" inherits="PureTextButtonTemplate" text="For Test">
+                <Anchors>
+                    <Anchor point="TOP" relativeKey="$parent" relativePoint="TOP" x="0" y="0" />
+                </Anchors>
+            </Button>
+            <Button parentKey="TextButton2" inherits="PureTextButtonTemplate">
+                <Anchors>
+                    <Anchor point="TOP" relativeKey="$parent" relativePoint="TOP" x="0" y="-30" />
+                </Anchors>
+            </Button>
+            <Button parentKey="TextButton3" inherits="PureTextButtonTemplate">
+                <Anchors>
+                    <Anchor point="TOP" relativeKey="$parent" relativePoint="TOP" x="0" y="-60" />
+                </Anchors>
+            </Button>
+            <Button parentKey="TextButton4" inherits="PureTextButtonTemplate">
+                <Anchors>
+                    <Anchor point="TOP" relativeKey="$parent" relativePoint="TOP" x="0" y="-90" />
+                </Anchors>
+            </Button>
+            <Button parentKey="TextButton5" inherits="PureTextButtonTemplate">
+                <Anchors>
+                    <Anchor point="TOP" relativeKey="$parent" relativePoint="TOP" x="0" y="-120" />
+                </Anchors>
+            </Button>
+            <Button parentKey="TextButton6" inherits="PureTextButtonTemplate">
+                <Anchors>
+                    <Anchor point="TOP" relativeKey="$parent" relativePoint="TOP" x="0" y="-150" />
+                </Anchors>
+            </Button>
+            <Button parentKey="TextButton7" inherits="PureTextButtonTemplate">
+                <Anchors>
+                    <Anchor point="TOP" relativeKey="$parent" relativePoint="TOP" x="0" y="-180" />
+                </Anchors>
+            </Button>
+            <Button parentKey="TextButton8" inherits="PureTextButtonTemplate">
+                <Anchors>
+                    <Anchor point="TOP" relativeKey="$parent" relativePoint="TOP" x="0" y="-210" />
+                </Anchors>
+            </Button>
+            <Button parentKey="ResetButton" inherits="PureTextButtonTemplate">
+                <Anchors>
+                    <Anchor point="TOP" relativeKey="$parent" relativePoint="TOP"
+                        x="0" y="-240" />
+                </Anchors>
+            </Button>
+            <Button parentKey="LeveGroupButton" inherits="PureTextButtonTemplate">
+                <Anchors>
+                    <Anchor point="TOP" relativeKey="$parent" relativePoint="TOP"
+                        x="0" y="-270" />
+                </Anchors>
+            </Button>
+        </Frames>
+
+    </Frame>
+
+    <Frame name="SendMessageConfigFrame" hidden="true" clampedToScreen="true"
+        inherits="BackGroundTemplate" scale="0.75">
+        <Frames>
+            <Button parentKey="CloseButton" inherits="CloseButtonTemplate" />
+        </Frames>
+        <Layers>
+            <Layer level="OVERLAY">
+                <FontString parentKey="Title" inherits="NumberFont_Outline_Huge" justifyH="CENTER"
+                    text="SendMessage Config">
+                    <Color r="0.85" g="0.55" b="0.30" />
+                    <Anchors>
+                        <Anchor point="TOP" y="-25" />
+                    </Anchors>
+                </FontString>
+                <FontString parentKey="Label1" inherits="ConfigLabelTemplate" text="Label 1">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="15" y="-80" />
+                    </Anchors>
+                </FontString>
+                <FontString parentKey="Label2" inherits="ConfigLabelTemplate" text="Label 2">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="15" y="-130" />
+                    </Anchors>
+                </FontString>
+                <FontString parentKey="Label3" inherits="ConfigLabelTemplate" text="Label 3">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="15" y="-180" />
+                    </Anchors>
+                </FontString>
+                <FontString parentKey="Label4" inherits="ConfigLabelTemplate" text="Label 4">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="15" y="-230" />
+                    </Anchors>
+                </FontString>
+                <FontString parentKey="Label5" inherits="ConfigLabelTemplate" text="Label 5">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="15" y="-280" />
+                    </Anchors>
+                </FontString>
+                <FontString parentKey="Label6" inherits="ConfigLabelTemplate" text="Label 6">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="15" y="-330" />
+                    </Anchors>
+                </FontString>
+                <FontString parentKey="Label7" inherits="ConfigLabelTemplate" text="Label 7">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="15" y="-380" />
+                    </Anchors>
+                </FontString>
+                <FontString parentKey="Label8" inherits="ConfigLabelTemplate" text="Label 8">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="15" y="-430" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Frames>
+            <EditBox parentKey="EditBox1" inherits="ConfigEditBoxTemplate">
+                <Anchors>
+                    <Anchor point="LEFT" relativeKey="$parent.Label1" relativePoint="RIGHT" x="10"
+                        y="0" />
+                </Anchors>
+            </EditBox>
+            <EditBox parentKey="EditBox2" inherits="ConfigEditBoxTemplate">
+                <Anchors>
+                    <Anchor point="LEFT" relativeKey="$parent.Label2" relativePoint="RIGHT" x="10"
+                        y="0" />
+                </Anchors>
+            </EditBox>
+            <EditBox parentKey="EditBox3" inherits="ConfigEditBoxTemplate">
+                <Anchors>
+                    <Anchor point="LEFT" relativeKey="$parent.Label3" relativePoint="RIGHT" x="10"
+                        y="0" />
+                </Anchors>
+            </EditBox>
+            <EditBox parentKey="EditBox4" inherits="ConfigEditBoxTemplate">
+                <Anchors>
+                    <Anchor point="LEFT" relativeKey="$parent.Label4" relativePoint="RIGHT" x="10"
+                        y="0" />
+                </Anchors>
+            </EditBox>
+            <EditBox parentKey="EditBox5" inherits="ConfigEditBoxTemplate">
+                <Anchors>
+                    <Anchor point="LEFT" relativeKey="$parent.Label5" relativePoint="RIGHT" x="10"
+                        y="0" />
+                </Anchors>
+            </EditBox>
+            <EditBox parentKey="EditBox6" inherits="ConfigEditBoxTemplate">
+                <Anchors>
+                    <Anchor point="LEFT" relativeKey="$parent.Label6" relativePoint="RIGHT" x="10"
+                        y="0" />
+                </Anchors>
+            </EditBox>
+            <EditBox parentKey="EditBox7" inherits="ConfigEditBoxTemplate">
+                <Anchors>
+                    <Anchor point="LEFT" relativeKey="$parent.Label7" relativePoint="RIGHT" x="10"
+                        y="0" />
+                </Anchors>
+            </EditBox>
+            <EditBox parentKey="EditBox8" inherits="ConfigEditBoxTemplate">
+                <Anchors>
+                    <Anchor point="LEFT" relativeKey="$parent.Label8" relativePoint="RIGHT" x="10"
+                        y="0" />
+                </Anchors>
+            </EditBox>
+        </Frames>
+    </Frame>
+
+    <Button name="SendMessageMainButton" registerForDrag="LeftButton" clampedToScreen="true" frameStrata="FULLSCREEN_DIALOG"
+        registerForClicks="RightButtonDown"
+        mixin="SendMessageMainButtonMixin"
+        inherits="UIMenuButtonStretchTemplate" movable="true">
+        <Size x="80" y="25" />
+        <Anchors>
+            <Anchor point="TOP" x="0" y="-200" />
+        </Anchors>
+        <Scripts>
+            <OnDragStart>
+                self:StartMoving()
+            </OnDragStart>
+            <OnDragStop method="OnDragStop" />
+            <OnLoad method="OnLoad" />
+            <OnEnter method="OnEnter" />
+            <OnLeave method="OnLeave" />
+            <OnClick method="OnClick" />
+            <OnEvent method="OnEvent" />
+        </Scripts>
+    </Button>
+
+
+</Ui>
