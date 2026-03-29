@@ -12,15 +12,21 @@ local db_default = {
 }
 local AutoHideTimes = 5
 
-SendMessageDB = SendMessageDB or CopyTable(db_default)
+do
+    SendMessageDB = SendMessageDB or CopyTable(db_default)
+    SendMessageUIDB = SendMessageUIDB or {}
+    SendMessageUIDB.SendMessageMainButton = SendMessageUIDB.SendMessageMainButton or {
+        point = "CENTER",
+        relativePoint = "CENTER",
+        x = 0,
+        y = 0,
+        scale = 1
+    }
+    SendMessageUIDB.SendMessageConfigFrame = SendMessageUIDB.SendMessageConfigFrame or {
+        scale = 1
+    }
+end
 
-SendMessagePositionDB = SendMessagePositionDB or {
-    point = "CENTER",
-    relativeTo = UIParent,
-    relativePoint = "CENTER",
-    x = 0,
-    y = 0
-}
 
 local function substrChars(str, maxChars)
     maxChars = maxChars or 4
@@ -59,7 +65,6 @@ local function substrChars(str, maxChars)
 end
 
 
-
 SendMessageTooltipMixin = {}
 
 function SendMessageTooltipMixin:SetTooltipText(tooltipText)
@@ -86,15 +91,27 @@ function SendMessageTooltipMixin:OnEnter()
     GameTooltip:Show();
 end
 
+function SendMessageOnMouseWheel(self, delta)
+    local currentScale = self:GetScale()
+    local newScale = currentScale + (delta * 0.1)
+    newScale = math.max(0.5, math.min(1.5, newScale))
+    self:SetScale(newScale)
+
+    local widgetName = self:GetName()
+    if widgetName and SendMessageUIDB[widgetName] then
+        SendMessageUIDB[widgetName].scale = newScale
+    end
+end
+
 SendMessageMainButtonMixin = {}
 SendMessageMainButtonMixin.lastClickTime = 0
 
 
 function SendMessageMainButtonMixin:OnLoad()
     self:SetText(SEND_MESSAGE)
-    SendMessageConfigFrame = _G["SendMessageConfigFrame"]
     self:RegisterEvent("ADDON_LOADED")
     self.SendMessageMainFrame = CreateFrame("Frame", "SendMessageMainFrame", self, "SendMessageMainFrameTempalte")
+    SendMessageConfigFrame = _G["SendMessageConfigFrame"]
 end
 
 function SendMessageMainButtonMixin:OnEnter()
@@ -132,25 +149,32 @@ end
 
 function SendMessageMainButtonMixin:OnDragStop()
     self:StopMovingOrSizing()
-    SendMessagePositionDB.point,
-    SendMessagePositionDB.relativeTo,
-    SendMessagePositionDB.relativePoint,
-    SendMessagePositionDB.x,
-    SendMessagePositionDB.y = self:GetPoint(1)
+    local widgetName = self:GetName()
+    local widgetData = widgetName and SendMessageUIDB[widgetName]
+    if widgetData then
+        local point, _, relativePoint, x, y = self:GetPoint()
+        widgetData.point = point
+        widgetData.relativePoint = relativePoint
+        widgetData.x = x
+        widgetData.y = y
+    end
 end
 
 function SendMessageMainButtonMixin:OnEvent(event, arg1)
     if event == "ADDON_LOADED" and arg1 == addonName then
-        self:ClearAllPoints()
-        local relativeTo = _G[SendMessagePositionDB.relativeTo] or UIParent
-        self:SetPoint(
-            SendMessagePositionDB.point,
-            relativeTo,
-            SendMessagePositionDB.relativePoint,
-            SendMessagePositionDB.x,
-            SendMessagePositionDB.y
-        )
-
+        local widgetName = self:GetName()
+        if widgetName and SendMessageUIDB[widgetName] then
+            local widgetData = SendMessageUIDB[widgetName]
+            self:ClearAllPoints()
+            self:SetPoint(
+                widgetData.point,
+                UIParent,
+                widgetData.relativePoint,
+                widgetData.x,
+                widgetData.y
+            )
+            self:SetScale(widgetData.scale or 1.0)
+        end
         if self.SendMessageMainFrame then
             for i = 1, #db_default do
                 local button = self.SendMessageMainFrame["TextButton" .. i]
@@ -161,7 +185,9 @@ function SendMessageMainButtonMixin:OnEvent(event, arg1)
                 end
             end
         end
-
+        if SendMessageConfigFrame then
+            SendMessageConfigFrame:SetScale(SendMessageUIDB.SendMessageConfigFrame.scale or 1)
+        end
         self:UnregisterEvent("ADDON_LOADED")
     end
 end
@@ -196,11 +222,11 @@ function SendMessageTextButtonMixin:OnClick(button)
         -- Not in group → SAY
         -- Right click behavior:
         -- In raid and leader → RAID_WARNING
-        -- In raid (not leader) → PARTY
+        -- In raid (not leader) → RAID
         -- In party (not raid) → PARTY
         -- Not in group → SAY
         local channel = (button == "LeftButton" and (inRaid and "RAID" or inGroup and "PARTY" or "SAY")) or
-            (button == "RightButton" and (inRaid and isGroupLeader and "RAID_WARNING" or inGroup and "PARTY" or "SAY"))
+            (button == "RightButton" and (inRaid and isGroupLeader and "RAID_WARNING" or inGroup and "RAID" or "SAY"))
 
         if channel then
             C_ChatInfo.SendChatMessage(text, channel)

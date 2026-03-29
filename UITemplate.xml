@@ -153,7 +153,7 @@
     </Frame>
 
     <Frame name="SendMessageConfigFrame" hidden="true" clampedToScreen="true"
-        inherits="BackGroundTemplate" scale="0.75">
+        inherits="BackGroundTemplate">
         <Frames>
             <Button parentKey="CloseButton" inherits="CloseButtonTemplate" />
         </Frames>
@@ -258,9 +258,13 @@
                 </Anchors>
             </EditBox>
         </Frames>
+        <Scripts>
+            <OnMouseWheel function="SendMessageOnMouseWheel" />
+        </Scripts>
     </Frame>
 
-    <Button name="SendMessageMainButton" registerForDrag="LeftButton" clampedToScreen="true" frameStrata="FULLSCREEN_DIALOG"
+    <Button name="SendMessageMainButton" registerForDrag="LeftButton" clampedToScreen="true"
+        frameStrata="FULLSCREEN_DIALOG"
         registerForClicks="RightButtonDown"
         mixin="SendMessageMainButtonMixin"
         inherits="UIMenuButtonStretchTemplate" movable="true">
@@ -278,6 +282,7 @@
             <OnLeave method="OnLeave" />
             <OnClick method="OnClick" />
             <OnEvent method="OnEvent" />
+            <OnMouseWheel function="SendMessageOnMouseWheel" />
         </Scripts>
     </Button>
 

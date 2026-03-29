@@ -3,7 +3,7 @@
 ## Title: SendMessage
 ## Author: CHEN
 ## IconTexture:Interface/ICONS/UI_EmberCourt-Emoji-Elated
-## SavedVariables: SendMessageDB,SendMessagePositionDB
+## SavedVariables: SendMessageDB,SendMessageUIDB
 
 
 UITemplate.xml

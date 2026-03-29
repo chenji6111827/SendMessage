@@ -20,5 +20,6 @@
         "INSTANCE",
         "LEAVE",
         "STATUS_TEXT_PARTY"
-    ]
+    ],
+    "Codegeex.RepoIndex": true
 }
