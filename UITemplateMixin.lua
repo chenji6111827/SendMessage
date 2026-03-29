@@ -226,7 +226,7 @@ function SendMessageTextButtonMixin:OnClick(button)
         -- In party (not raid) → PARTY
         -- Not in group → SAY
         local channel = (button == "LeftButton" and (inRaid and "RAID" or inGroup and "PARTY" or "SAY")) or
-            (button == "RightButton" and (inRaid and isGroupLeader and "RAID_WARNING" or inGroup and "RAID" or "SAY"))
+            (button == "RightButton" and (inRaid and isGroupLeader and "RAID_WARNING" or inGroup and "PARTY" or "SAY"))
 
         if channel then
             C_ChatInfo.SendChatMessage(text, channel)
