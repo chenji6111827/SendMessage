@@ -225,9 +225,53 @@ function SendMessageTextButtonMixin:OnClick(button)
         -- In raid (not leader) → RAID
         -- In party (not raid) → PARTY
         -- Not in group → SAY
-        local channel = (button == "LeftButton" and (inRaid and "RAID" or inGroup and "PARTY" or "SAY")) or
-            (button == "RightButton" and (inRaid and isGroupLeader and "RAID_WARNING" or inGroup and "PARTY" or "SAY"))
+        local inLFGDungeon = IsInLFGDungeon()
+        local channel
 
+        if button == "LeftButton" then
+            -- 左键点击逻辑
+            if inLFGDungeon then
+                -- 在LFG副本中（包括5人本、大秘境、战场、竞技场等），统一使用副本频道
+                channel = "INSTANCE_CHAT"
+            elseif GetNumGroupMembers() > 0 then
+                -- 不在LFG副本，但在传统队伍中
+                if GetNumGroupMembers() > 5 then
+                    -- 团队
+                    channel = "RAID"
+                else
+                    -- 小队
+                    channel = "PARTY"
+                end
+            else
+                -- 不在任何队伍或副本中
+                channel = "SAY"
+            end
+        elseif button == "RightButton" then
+            -- 右键点击逻辑
+            if inLFGDungeon then
+                -- 在LFG副本中（包括5人本、大秘境、战场、竞技场等），统一使用副本频道
+                channel = "INSTANCE_CHAT"
+            elseif GetNumGroupMembers() > 0 then
+                -- 不在LFG副本，但在传统队伍中
+                if GetNumGroupMembers() > 5 then
+                    -- 团队
+                    if isGroupLeader then
+                        channel = "RAID_WARNING"
+                    else
+                        channel = "RAID"
+                    end
+                else
+                    -- 小队
+                    channel = "PARTY"
+                end
+            else
+                -- 不在任何队伍或副本中
+                channel = "SAY"
+            end
+        end
+
+
+        -- 如果确定了频道，则发送消息
         if channel then
             C_ChatInfo.SendChatMessage(text, channel)
         end
