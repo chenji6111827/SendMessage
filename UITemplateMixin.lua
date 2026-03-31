@@ -214,64 +214,24 @@ function SendMessageTextButtonMixin:OnClick(button)
     local isGroupLeader = UnitIsGroupLeader("player")
     if buttonNum then
         local text = SendMessageDB[buttonNum] and SendMessageDB[buttonNum].text or db_default[buttonNum].text
-        local inRaid = IsInRaid()
-        local inGroup = IsInGroup()
-        -- Left click behavior:
-        -- In raid → RAID
-        -- In party (not raid) → PARTY
-        -- Not in group → SAY
-        -- Right click behavior:
-        -- In raid and leader → RAID_WARNING
-        -- In raid (not leader) → RAID
-        -- In party (not raid) → PARTY
-        -- Not in group → SAY
+
         local inLFGDungeon = IsInLFGDungeon()
+        local inInstance, instanceType = IsInInstance()
         local channel
 
+        local numGroupMembers = GetNumGroupMembers()
         if button == "LeftButton" then
-            -- 左键点击逻辑
-            if inLFGDungeon then
-                -- 在LFG副本中（包括5人本、大秘境、战场、竞技场等），统一使用副本频道
-                channel = "INSTANCE_CHAT"
-            elseif GetNumGroupMembers() > 0 then
-                -- 不在LFG副本，但在传统队伍中
-                if GetNumGroupMembers() > 5 then
-                    -- 团队
-                    channel = "RAID"
-                else
-                    -- 小队
-                    channel = "PARTY"
-                end
-            else
-                -- 不在任何队伍或副本中
-                channel = "SAY"
-            end
+            channel = (inLFGDungeon or (inInstance and (instanceType == "pvp" or instanceType == "arena" or instanceType == "scenario"))) and
+                "INSTANCE_CHAT" or
+                (numGroupMembers > 0 and (numGroupMembers > 5 and "RAID" or "PARTY") or "SAY")
         elseif button == "RightButton" then
-            -- 右键点击逻辑
-            if inLFGDungeon then
-                -- 在LFG副本中（包括5人本、大秘境、战场、竞技场等），统一使用副本频道
-                channel = "INSTANCE_CHAT"
-            elseif GetNumGroupMembers() > 0 then
-                -- 不在LFG副本，但在传统队伍中
-                if GetNumGroupMembers() > 5 then
-                    -- 团队
-                    if isGroupLeader then
-                        channel = "RAID_WARNING"
-                    else
-                        channel = "RAID"
-                    end
-                else
-                    -- 小队
-                    channel = "PARTY"
-                end
-            else
-                -- 不在任何队伍或副本中
-                channel = "SAY"
-            end
+            channel = (inLFGDungeon or (inInstance and (instanceType == "pvp" or instanceType == "arena" or instanceType == "scenario"))) and
+                "INSTANCE_CHAT" or
+                (numGroupMembers > 0 and (numGroupMembers > 5 and (isGroupLeader and "RAID_WARNING" or "RAID") or "PARTY") or "SAY")
         end
 
 
-        -- 如果确定了频道，则发送消息
+        
         if channel then
             C_ChatInfo.SendChatMessage(text, channel)
         end
