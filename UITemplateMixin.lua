@@ -208,6 +208,7 @@ function SendMessageTextButtonMixin:GetButtonInfo()
     return nil, nil
 end
 
+-- Now can send messages in LFG Group
 function SendMessageTextButtonMixin:OnClick(button)
     local buttonKey, buttonNum = self:GetButtonInfo()
     if not buttonKey then return end

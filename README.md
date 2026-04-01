@@ -63,3 +63,6 @@ Hover over the main button to reveal the submenu, then click to send a message.
 现在可以使用鼠标滚轮调整主按钮和配置界面的缩放比例，缩放范围：50% - 150缩放设置会自动保存，下次登录时自动恢复。
 Now you can adjust the scale of the main button and config frame using the mouse wheel.
 Scale range: 50% - 150%,Scale settings are automatically saved and restored on next login
+
+### 2026年4月1日 Update
+Update for LFG Group
